@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <script>
+            if (!localStorage.getItem("user")) {
+                window.location.href = "index.html"; 
+            }
+        </script>
+        <h1 class="text-center mb-2">Our Products</h1>
+        <div class="d-flex gap-3 justify-content-center align-items-center mb-3">
+            <div class="text-center mt-2">
+                <a href="shoppingCart.html" class="btn btn-success">Go to Cart</a>
+            </div>
+            <div class="text-center mt-2">
+                <a href="logout.html" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+        <div class="row" id="products">
+           <!-- Products put to products page dynamically by js-->
+        </div>
+        
+    </div>
+
+    <script>
+        const products = [
+            { name: "Product 1", image: "./imgs/1.jpg", description: "Description 1", price: 100 },
+            { name: "Product 2", image: "./imgs/2.jpg", description: "Description 2", price: 200 },
+            { name: "Product 3", image: "./imgs/3.jpg", description: "Description 3", price: 300 } ,
+            { name: "Product 4", image: "./imgs/4.jpg", description: "Description 4", price: 400 } ,
+            { name: "Product 5", image: "./imgs/5.jpg", description: "Description 5", price: 500 } ,
+            { name: "Product 6", image: "./imgs/6.png", description: "Description 6", price: 600 } ,
+            { name: "Product 7", image: "./imgs/7.jpg", description: "Description 7", price: 700 } ,
+            { name: "Product 8", image: "./imgs/8.jpg", description: "Description 8", price: 800 } ,
+            { name: "Product 9", image: "./imgs/9.jpg", description: "Description 9", price: 900 } 
+            
+        ];
+
+        const productsContainer = document.getElementById("products");
+
+        products.forEach((product, index) => {
+            const productHTML = `
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description}</p>
+                            <p class="text-success fw-bold">$${product.price}</p>
+                            <button class="btn btn-primary w-100 addToCart" data-index="${index}">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productsContainer.innerHTML += productHTML;
+        });
+
+        document.querySelectorAll(".addToCart").forEach(button => {
+            button.addEventListener("click", function() {
+                const productIndex = this.getAttribute("data-index");
+                const selectedProduct = products[productIndex];
+
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                cart.push(selectedProduct);
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                alert("Product added to cart");
+            });
+        });
+    </script>
+</body>
+</html>
